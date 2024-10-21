@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import person from "../../assets/person.png";
+import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -8,8 +11,7 @@ const Registration = () => {
     password: '',
     role: 'user',
   });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -23,27 +25,32 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
+
 
     try {
       const response = await axios.post('http://localhost:5001/auth/registration', formData); 
-      setSuccess(response.data.message); 
+     
+      toast.success(response.data ? response.data.message: "Successfull"); 
     } catch (err) {
-      setError(err.response?.data.msg || 'Something went wrong');
+      toast.error(err.response ? err.response.data.message : "Something went wrong"); 
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border border-gray-300 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      {success && <div className="text-green-500 mb-4">{success}</div>}
+    <div className="flex justify-center items-center h-screen">
+
+<div className="w-full max-w-sm p-6 bg-slate-900 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-white text-center">Registration</h2>
+    
+
+      <div className="flex justify-center my-6">
+        <img  src={person} alt="" />
+        </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="name">Name</label>
+          
           <input
             type="text"
             name="name"
@@ -51,11 +58,12 @@ const Registration = () => {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-full px-4"
+            placeholder='Enter your name '
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="email">Email</label>
+        
           <input
             type="email"
             name="email"
@@ -63,11 +71,11 @@ const Registration = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-full px-4"
+            placeholder='Enter your email'
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="password">Password</label>
           <input
             type="password"
             name="password"
@@ -75,19 +83,25 @@ const Registration = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-full px-4"
+            placeholder='Enter your password'
           />
         </div>
     
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
+          className="bg-[#FB904A] text-white p-2 rounded-full w-full font-bold  "
         >
-          {loading ? 'Registering...' : 'Register'}
+          {loading ? 'Signing up...' : 'Sign up'}
         </button>
       </form>
+
+      <div className="flex justify-center text-white my-4">
+        <h4>Already have an account? <Link to={'/login'} className="text-[#FB904A] font-bold">Login</Link></h4>
+      </div>
     </div>
+ </div>
   );
 };
 

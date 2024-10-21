@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import person from "../../assets/person.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Registration = () => {
@@ -11,6 +11,7 @@ const Registration = () => {
     password: '',
     role: 'user',
   });
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +32,8 @@ const Registration = () => {
       const response = await axios.post('http://localhost:5001/auth/registration', formData); 
      
       toast.success(response.data ? response.data.message: "Successfull"); 
+
+      navigate("/");
     } catch (err) {
       toast.error(err.response ? err.response.data.message : "Something went wrong"); 
     } finally {

@@ -1,11 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logo from '../assets/logo.png'
+import { AuthContext } from '../contextApi/AuthContex';
+
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const {user, logout} = useContext(AuthContext)
+    console.log(user);
+    
+
+    
+
     
   
     const links = [
@@ -45,7 +54,13 @@ const Navbar = () => {
                 ))}
             </ul>
             <div className="hidden md:block">
-                <img src="path/to/user-icon.png" alt="User" className="w-10 h-10" />
+              {
+                user?
+                <button className='bg-amber-500 px-4 py-2 font-bold rounded'> Log out</button>
+                :
+                <button className='bg-amber-500 px-4 py-2 font-bold rounded'> Log in</button>
+
+              }
             </div>
         </nav>
     );
